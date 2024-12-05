@@ -7,31 +7,40 @@ app = Flask(__name__)
 CONFIG_PATH = "config.json"
 
 
+class File:
+    def __init__(self, path, name):
+        self.is_dir = False
+        self.path = path
+        self.name = name
+
+
+class Directory:
+    def __init__(self, name, subdirs=(), files=()):
+        self.is_dir = True
+        self.name = name
+        self.subdirs = subdirs
+        self.files = files
+
+def generate_dir(path: Path):
+    files = []
+    subdirs = []
+    for file in path.iterdir():
+        if file.is_dir():
+            subdirs.append(generate_dir(file))
+        else:
+            files.append(File(path=(path/file).relative_to(FILE_SERVE_PATH), name=file.name))
+    return Directory(name=path.name, subdirs=subdirs, files=files)
+
 @app.route("/files")
 def files():
-    files = {
-        "a": {
-            "b": {
-                "c": {
-                    "test.html": ""
-                }
-            }
-        },
-        "test.py": ""
-    }
-    return render_template("files.html", files=files)
+    files = generate_dir(Path(FILE_SERVE_PATH))
+    return render_template("files.html", files=files, preview=True)
 
 
 @app.route("/files/<path:filename>")
 def file_path(filename):
-    path = Path(filename)
-    if path.is_dir():
-        files = [(Path(Path(FILE_SERVE_PATH)/path/Path(file)).relative_to(Path(FILE_SERVE_PATH)),
-                  file+("/" if Path(Path(FILE_SERVE_PATH)/path/Path(file)).relative_to(Path(FILE_SERVE_PATH)).is_dir() else ""))
-                 for file in os.listdir(Path(FILE_SERVE_PATH)/path)]
-        print(files)
-        return render_template("files.html", files=files, header="/"+filename+"/")
-    return send_file(path)
+    path = Path(FILE_SERVE_PATH)/Path(filename)
+    return send_file(path, as_attachment=False)
 
 
 with open(CONFIG_PATH, "r") as f:

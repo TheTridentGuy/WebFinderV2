@@ -40,7 +40,7 @@ ul, #myUL {
 
 /**/
 
-#myUL {
+#rootul {
     margin: 0;
     padding: 0;
 }
@@ -50,7 +50,6 @@ ul, #myUL {
 }
 .caret::before {
     content: "\25B6";
-    color: black;
     display: inline-block;
     margin-right: 6px;
 }
@@ -62,4 +61,9 @@ ul, #myUL {
 }
 .active {
     display: block;
+}
+img, svg {
+    height: 5vmin;
+    max-width: 5vmin;
+    fill: currentColor;
 }
