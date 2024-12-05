@@ -1,0 +1,65 @@
+:root {
+    --main-color: #fff;
+    --main-bg: #000;
+}
+* {
+    font-family: sans-serif;
+    color: var(--main-color);
+}
+body {
+    background-color: var(--main-bg);
+}
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.flex-grow {
+    flex-grow: 1;
+}
+.icon {
+    display: inline-flex;
+    align-self: center;
+}
+.icon svg, .icon img {
+    height: 1em;
+    width: 1em;
+    fill: currentColor;
+}
+.icon.baseline svg, .icon img {
+    top: 0;
+    position: relative;
+    padding-right: .2em;
+}
+ul, #myUL {
+    list-style-type: none;
+}
+
+/**/
+
+#myUL {
+    margin: 0;
+    padding: 0;
+}
+.caret {
+    cursor: pointer;
+    user-select: none;
+}
+.caret::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+}
+.caret-down::before {
+    transform: rotate(90deg);
+}
+.nested {
+    display: none;
+}
+.active {
+    display: block;
+}
